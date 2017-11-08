@@ -9,7 +9,7 @@
     <groupId>org.rocksdb</groupId>
     <artifactId>rocksdbjni</artifactId>
     <!-- Version will be automatically replaced -->
-    <version>-</version>
+    <version>5.0.3</version>
     <description>RocksDB fat jar that contains .so files for linux32, linux64 and musl-libc, jnilib files
         for Mac OSX, and a .dll for Windows x64.
     </description>
@@ -142,4 +142,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+<distributionManagement>
+                <repository>
+                <id>bintray-double16-maven</id>
+                <name>double16-maven</name>
+                <url>https://api.bintray.com/maven/double16/maven/rocksdb/;publish=1</url>
+                </repository>
+</distributionManagement>
 </project>
