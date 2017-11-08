@@ -1,8 +1,11 @@
 package org.rocksdb.util;
 
+import java.io.File;
+
 public class Environment {
   private static String OS = System.getProperty("os.name").toLowerCase();
   private static String ARCH = System.getProperty("os.arch").toLowerCase();
+  private static boolean MUSL_LIBC = new File("/lib/libc.musl-x86_64.so.1").canRead();
 
   public static boolean isWindows() {
     return (OS.contains("win"));
@@ -16,6 +19,10 @@ public class Environment {
     return (OS.contains("nix") ||
         OS.contains("nux") ||
         OS.contains("aix"));
+  }
+
+  public static boolean isMuslLibc() {
+    return MUSL_LIBC;
   }
 
   public static boolean isSolaris() {
@@ -37,7 +44,11 @@ public class Environment {
   public static String getJniLibraryName(final String name) {
     if (isUnix()) {
       final String arch = (is64Bit()) ? "64" : "32";
-      return String.format("%sjni-linux%s", name, arch);
+      if (isMuslLibc()) {
+        return String.format("%sjni-musl%s", name, arch);
+      } else {
+        return String.format("%sjni-linux%s", name, arch);
+      }
     } else if (isMac()) {
       return String.format("%sjni-osx", name);
     } else if (isSolaris()) {
